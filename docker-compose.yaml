@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:9.3
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"
+    networks:
+      - mynetwork
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: adminpassword
+      GF_INSTALL_PLUGINS: grafana-clock-panel,grafana-simple-json-datasource
+    depends_on:
+      - postgres
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
